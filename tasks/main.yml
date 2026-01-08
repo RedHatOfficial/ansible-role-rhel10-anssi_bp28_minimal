@@ -15,8 +15,9 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_dnf_automatic_installed | bool
-  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages )
+  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
+    in ["docker", "lxc", "openvz", "podman", "container"] ) )
   tags:
   - CCE-87561-7
   - enable_strategy
@@ -166,8 +167,9 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
-  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages )
+  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
+    in ["docker", "lxc", "openvz", "podman", "container"] ) )
   tags:
   - CCE-86671-5
   - NIST-800-53-CM-6(a)
@@ -193,8 +195,9 @@
   - medium_disruption | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
-  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages )
+  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
+    in ["docker", "lxc", "openvz", "podman", "container"] ) )
   tags:
   - CCE-87469-3
   - NIST-800-53-CM-6(a)
@@ -400,7 +403,7 @@
   - restrict_strategy | bool
 
 - name: Read signatures in GPG key
-  ansible.builtin.command: gpg --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+  ansible.builtin.command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
   changed_when: false
   register: gpg_fingerprints
   failed_when: false
@@ -542,8 +545,9 @@
   - low_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages )
+  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
+    in ["docker", "lxc", "openvz", "podman", "container"] ) )
   tags:
   - CCE-90249-4
   - NIST-800-53-CM-6(a)
@@ -567,6 +571,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87288-7
@@ -597,6 +602,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
@@ -664,6 +670,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   - result_authselect_available_features.stdout is search("with-pwhistory")
@@ -862,6 +869,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   - '(result_authselect_available_features.stdout is defined and result_authselect_available_features.stdout is not search("with-pwhistory"))
     or result_authselect_available_features is not defined
@@ -894,6 +902,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87288-7
@@ -1080,6 +1089,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   - result_pwhistory_conf_check.stat.exists
   tags:
@@ -1315,6 +1325,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   - not result_pwhistory_conf_check.stat.exists
   tags:
@@ -1344,6 +1355,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-87388-5
@@ -1410,6 +1422,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
@@ -1478,6 +1491,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_authselect_present.stat.exists
   tags:
@@ -1507,6 +1521,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-87388-5
@@ -1537,6 +1552,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -1874,6 +1890,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -1962,6 +1979,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_faillock_conf_check.stat.exists
   tags:
@@ -1991,6 +2009,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-87975-9
@@ -2055,6 +2074,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
@@ -2119,6 +2139,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_authselect_present.stat.exists
   tags:
@@ -2144,6 +2165,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-87975-9
@@ -2170,6 +2192,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -2516,6 +2539,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -2575,6 +2599,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_faillock_conf_check.stat.exists
   tags:
@@ -2600,6 +2625,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-86672-3
@@ -2663,6 +2689,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
@@ -2726,6 +2753,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_authselect_present.stat.exists
   tags:
@@ -2750,6 +2778,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-86672-3
@@ -2775,6 +2804,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -3116,6 +3146,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -3199,6 +3230,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_faillock_conf_check.stat.exists
   tags:
@@ -3223,6 +3255,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-89250-5
@@ -3289,6 +3322,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
@@ -3357,6 +3391,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_authselect_present.stat.exists
   tags:
@@ -3386,6 +3421,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-89250-5
@@ -3416,6 +3452,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -3755,6 +3792,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_faillock_conf_check.stat.exists
   tags:
@@ -3843,6 +3881,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - not result_faillock_conf_check.stat.exists
   tags:
@@ -3873,6 +3912,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89089-7
@@ -3903,6 +3943,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89089-7
@@ -3933,6 +3974,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89089-7
@@ -3962,6 +4004,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-90276-7
@@ -3992,6 +4035,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-90276-7
@@ -4022,6 +4066,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-90276-7
@@ -4051,6 +4096,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87289-5
@@ -4078,6 +4124,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87289-5
@@ -4105,6 +4152,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87289-5
@@ -4131,6 +4179,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87852-0
@@ -4162,6 +4211,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87852-0
@@ -4193,6 +4243,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-87852-0
@@ -4223,6 +4274,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89297-6
@@ -4250,6 +4302,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89297-6
@@ -4277,6 +4330,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89297-6
@@ -4303,6 +4357,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89959-1
@@ -4331,6 +4386,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89959-1
@@ -4359,6 +4415,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-89959-1
@@ -4385,6 +4442,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - set_password_hashing_algorithm_systemauth | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-88697-8
@@ -4614,6 +4672,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - set_password_hashing_algorithm_systemauth | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_pam_file_present.stat.exists
   tags:
@@ -4644,6 +4703,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - set_password_hashing_algorithm_systemauth | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   tags:
   - CCE-88697-8
@@ -4821,6 +4881,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - set_password_hashing_algorithm_systemauth | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"pam" in ansible_facts.packages'
   - result_pam_file_present.stat.exists
   tags:
@@ -4854,6 +4915,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   - '"shadow-utils" in ansible_facts.packages'
   tags:
   - CCE-87452-9
@@ -4873,6 +4935,14 @@
   ansible.builtin.user:
     user: root
     password_expire_max: '{{ var_accounts_maximum_age_root }}'
+  when:
+  - accounts_password_set_max_life_root | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-88296-9
   - accounts_password_set_max_life_root
@@ -4881,13 +4951,6 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
-  when:
-  - accounts_password_set_max_life_root | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Set number of Password Hashing Rounds - password-auth - Check if /etc/pam.d/password-auth file is present
   ansible.builtin.stat:
@@ -4900,7 +4963,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - '"pam" in ansible_facts.packages'
+  - ( "pam" in ansible_facts.packages and "kernel-core" in ansible_facts.packages )
   tags:
   - CCE-88891-7
   - accounts_password_pam_unix_rounds_password_auth
@@ -5142,7 +5205,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - '"pam" in ansible_facts.packages'
+  - ( "pam" in ansible_facts.packages and "kernel-core" in ansible_facts.packages )
   - result_pam_file_present.stat.exists
   tags:
   - CCE-88891-7
@@ -5164,7 +5227,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - '"pam" in ansible_facts.packages'
+  - ( "pam" in ansible_facts.packages and "kernel-core" in ansible_facts.packages )
   tags:
   - CCE-90063-9
   - accounts_password_pam_unix_rounds_system_auth
@@ -5406,7 +5469,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - '"pam" in ansible_facts.packages'
+  - ( "pam" in ansible_facts.packages and "kernel-core" in ansible_facts.packages )
   - result_pam_file_present.stat.exists
   tags:
   - CCE-90063-9
