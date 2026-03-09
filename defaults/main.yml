@@ -48,6 +48,7 @@ medium_severity: true
 no_reboot_needed: true
 package_dnf_automatic_installed: true
 package_kea_removed: true
+package_sequoia_sq_installed: true
 package_telnet_removed: true
 package_telnet_server_removed: true
 package_tftp_removed: true
